@@ -107,15 +107,16 @@ const menu = [
 const menuCenter = document.querySelector(".menu-center")
 const btnContainer = document.querySelector(".btn-container")
 
+// Display Items and Buttons
 window.addEventListener("DOMContentLoaded", function(){
-    displayMenuItems(menu)
+   displayMenuItems(menu)
    displayMenuBtns()
 })
 
 // Display Menu Item
 function displayMenuItems(items){
-    let displayMenu = items.map(function(item){
-        return `<article class="menu-item">
+    let displayMenu = items.map((item) =>
+         `<article class="menu-item">
           <img src="${item.img}" class="photo"/>
           <div class="item-info">
             <header>
@@ -127,21 +128,23 @@ function displayMenuItems(items){
             </p>
           </div>
         </article>`
-    })
+    )
     menuCenter.innerHTML = displayMenu.join("")
 }
+
 // Display Buttons
 function displayMenuBtns(){
-     const categories = menu.reduce(function(values, item){
-        if(!values.includes(item.category)){
-            values.push(item.category)
-        }
-        return values
-    }, ["all"])
-    const categoryBtns = categories.map(function(item){
-        return `<button class="filter-btn" data-id="${item}">${item}</button>`
-    })
-    btnContainer.innerHTML = categoryBtns.join("")
+    // get categories
+    const categories = Array.of("all", ...new Set(menu.map((items)=> items.category)))
+
+    // display buttons
+    const categoryBtns = categories.map((item)=>
+         `<button class="filter-btn" data-id="${item}">${item}</button>`
+    ).join("")
+
+    btnContainer.innerHTML = categoryBtns
+
+    // filter function
     const filterBtns = document.querySelectorAll(".filter-btn")
     filterBtns.forEach(function(btn){
         btn.addEventListener("click", function(e){
@@ -149,10 +152,8 @@ function displayMenuBtns(){
           if(category === "all"){
             return displayMenuItems(menu)
           }
-          const menuCategory = menu.filter(function(menuItem){
-              return menuItem.category === category
-            })
-            displayMenuItems(menuCategory)
+          const menuCategory = menu.filter((item)=> item.category === category)
+          displayMenuItems(menuCategory)
         })
     })
 }
